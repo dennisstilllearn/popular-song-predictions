@@ -1,0 +1,6 @@
+streamlit
+scikit-learn
+pandas
+numpy
+xgboost
+altair==4.2.2
