@@ -12,9 +12,14 @@ loaded_y_transformer = loaded_objects['y_transformer']
 # Judul dan Deskripsi
 st.title("🎵 Prediksi Popularitas Lagu")
 st.markdown("""
-Masukkan detail lagu di bawah ini untuk memprediksi popularitasnya.  
-Aplikasi ini menggunakan model machine learning untuk melakukan prediksi. 🚀
+Masukkan detail lagu di bawah ini untuk memprediksi popularitasnya. 🚀
 """)
+
+st.markdown("---")
+
+# Input Judul Lagu (untuk tampilan)
+st.header("🎵 Masukkan Judul Lagu")
+song_title = st.text_input("Masukkan Judul Lagu Yang Ingin Anda Prediksi")
 
 # Membagi input menjadi beberapa bagian untuk tampilan lebih rapi
 st.header("🔧 Masukkan Detail Lagu")
@@ -37,6 +42,8 @@ with col2:
     time_signature = st.selectbox("Time Signature", [3, 4, 5])
     audio_valence = st.number_input("Valence", 0.0, 1.0, format="%.6f")
 
+
+
 # Menggabungkan input data ke dalam array
 data = np.array([[song_duration_ms, acousticness, danceability, energy, instrumentalness, key, 
                   liveness, loudness, audio_mode, speechiness, tempo, time_signature, audio_valence]])
@@ -49,11 +56,20 @@ if st.button("Prediksi Popularitas Lagu"):
         y_pred_transformed = loaded_pipeline.predict(data)  # Pipeline otomatis memproses input
         y_pred_actual = loaded_y_transformer.inverse_transform(y_pred_transformed.reshape(-1, 1))  # Membalik transformasi output
         
-        st.success(f"Prediksi Popularitas Lagu: **{y_pred_actual[0][0]:.2f}**")
+        if song_title:
+            st.success(f"Lagu '{song_title}' memiliki tingkat popularitas sebesar **{y_pred_actual[0][0]:.2f}**")
+        else:
+            st.success(f"Lagu ini memiliki tingkat popularitas sebesar **{y_pred_actual[0][0]:.2f}**")
+        
         st.balloons()
     except Exception as e:
         st.error(f"Terjadi kesalahan selama prediksi: {e}")
 
 # Footer
 st.markdown("---")
-st.markdown("Dibuat dengan menggunakan [Streamlit](https://streamlit.io/).")
+footer_text = """
+    Irfansyah Nur Aviatna | Dennis Raka Pratama Mukti | Muhammad Ilham | Novian Rizky Dewanta | Khafidhotul Urfa | Aulia Husna
+"""
+
+# Menampilkan footer dengan spasi untuk memastikan berada di bawah
+st.markdown(footer_text, unsafe_allow_html=False)
